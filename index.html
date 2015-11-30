@@ -4,13 +4,75 @@
 <head>
     <title>Fallout Hacking</title>
     <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+    <style>
+        #terminal, .terminal-side {
+            width: 100%;
+        }
+        #terminal-left, #terminal-right {
+            width: 50%;
+        }
+        .char-td {
+            height: 25px;
+            line-height: 25px;
+            text-align: center;
+        }
+        .hovered {
+            background: #0F0;
+            color: black;
+        }
+        table, tr, td {
+            padding: 0px;
+            margin: 0px;
+        }
+        body {
+            background: black;
+            color: #0F0;
+            font-family: monospace;
+        }
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+    </style>
 </head>
 
-<body ng-controller="Controller as c">
-
-    <button ng-click="c.getWords()">Get Words</button>
-    <br>
-    <div id="words"></div>
+<body ng-controller="Controller as c" ng-cloak>
+    <p >
+        POPCO INDUSTRIES (TM) TERMLINK CONTROL
+        <br>
+        <br>
+        ENTER PASSWORD NOW
+    </p>
+    <p >
+        TRIES REMAINING: <span ng-repeat="try in c.tries track by $index">&#9608;&nbsp;</span>
+    </p>
+    <table id="terminal">
+        <tr>
+            <td id="terminal-left">
+                <table class="terminal-side">
+                    <tr ng-repeat="row in c.terminalLeft track by $index">
+                        <td ng-repeat="col in row track by $index" class="char-td {{ col.highlight ? 'hovered' : '' }}" ng-mouseover="c.hover(col)" ng-click="c.click(col)">
+                            <span class="char">{{ col.char }}</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td id="terminal-right">
+                <table class="terminal-side">
+                    <tr ng-repeat="row in c.terminalRight track by $index">
+                        <td ng-repeat="col in row track by $index" class="char-td {{ col.highlight ? 'hovered' : '' }}" ng-mouseover="c.hover(col)" ng-click="c.click(col)">
+                            <span class="char">{{ col.char }}</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <div id="log">
+        <p ng-repeat="log in c.logList track by $index">
+            {{ log }}
+        </p>
+    </div>
+    BOOTING UP: {{ c.loadingPercent }}%
 
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/angular.js"></script>
